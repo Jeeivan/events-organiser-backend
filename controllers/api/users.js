@@ -2,17 +2,26 @@ import '../../config/database.js'
 import { User } from '../../models/user.js'
 
 export async function saveUser(req, res) {
-    if ((await User.count({ userEmail: req.body.email })) === 0) {
-        const newuser = new User({
+    try {
+        const newUser = new User({
           userEmail: req.body.email,
           name: req.body.name,
         });
-        newuser.save().then(() => {
-          res.sendStatus(200);
-          console.log("user saved")
-        });
-    } else {
+        await newUser.save();
+        res.sendStatus(200);
+        console.log("User saved");
+    } catch {
         res.sendStatus(500)
         console.log("user not saved")
+    }
+}
+
+export async function displayUsers(req, res) {
+    try {
+        const users = await User.find();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }

@@ -8,13 +8,7 @@ const groupSchema = new mongoose.Schema({
     code: {
         type: Number,
         required: true,
-      },
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    },
-
+      }
 })
 
 export const Group = mongoose.model('Group', groupSchema)
