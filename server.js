@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import groupRouter from "./routes/api/group.js"
 import userRouter from "./routes/api/users.js";
+import eventRouter from "./routes/api/event.js";
+import attendanceRouter from "./routes/api/attendance.js";
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/users', userRouter)
 app.use('/group', groupRouter)
+app.use('/event', eventRouter)
+app.use('/attendance', attendanceRouter)
 
 mongoose.connect(process.env.DATABASE_URL);
 

@@ -13,7 +13,6 @@ const attendanceSchema = new mongoose.Schema({
     },
     going: {
         type: Boolean,
-        default: false
     }
 })
 
