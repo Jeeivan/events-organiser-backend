@@ -16,7 +16,7 @@ export async function saveUser(req, res) {
     }
 }
 
-export async function displayUsers(req, res) {
+export async function displayAllUsers(req, res) {
     try {
         const users = await User.find();
         res.status(200).json(users);
@@ -25,3 +25,16 @@ export async function displayUsers(req, res) {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export async function displayUsers(req, res) {
+    try {
+        const { groupId } = req.params;
+
+        const users = await User.find({ groupIds: { $in: [groupId] } })
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+

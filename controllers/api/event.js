@@ -11,6 +11,8 @@ export async function createEvent (req, res) {
             name: req.body.name,
             description: req.body.description,
             location: req.body.location,
+            date: req.body.date,
+            time: req.body.time,
             groupId: groupId, // referencing the group ID
         })
         await event.save()
