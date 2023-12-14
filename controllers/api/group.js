@@ -14,18 +14,28 @@ export async function displayGroups(req, res) {
 
 export async function createGroup (req, res) {
     try {
+        let generatedCode;
+        let existingGroup = true;
 
-        // Generate a 4-digit code
-        const generatedCode = Math.floor(1000 + Math.random() * 9000);
-        
+        while (existingGroup) {
+            // Generate a 4-digit code
+            generatedCode = Math.floor(1000 + Math.random() * 9000);
 
-        // Create a new Group instance with the generated code
+            // Check if a group with the generated code already exists
+            existingGroup = await Group.findOne({ code: generatedCode });
+        }
+
+        // Create a new Group instance with the unique generated code
         const group = new Group({
             name: req.body.name,
             code: generatedCode,
-        })
-        await group.save()
-        res.json(group)
+        });
+
+        // Save the new group to the database
+        await group.save();
+
+        // Return the created group in the response
+        res.json(group);
     } catch (err) {
         res.status(500).send(err.message);
     }
