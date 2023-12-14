@@ -7,6 +7,7 @@ import groupRouter from "./routes/api/group.js"
 import userRouter from "./routes/api/users.js";
 import eventRouter from "./routes/api/event.js";
 import attendanceRouter from "./routes/api/attendance.js";
+import chatRouter from "./routes/api/chat.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use('/users', userRouter)
 app.use('/group', groupRouter)
 app.use('/event', eventRouter)
 app.use('/attendance', attendanceRouter)
+app.use('/chat', chatRouter)
 
 mongoose.connect(process.env.DATABASE_URL);
 
