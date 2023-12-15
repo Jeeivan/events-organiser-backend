@@ -51,8 +51,10 @@ export async function login(req, res) {
         const existingUser = await User.findOne({ email: email });
 
         if (existingUser) {
+            // Comparing provided password with the hashed password
+            const isPasswordValid = await bcrypt.compare(password, existingUser.password);
             // Check if the provided password matches the stored password
-            if (existingUser.password === password) {
+            if (isPasswordValid) {
                 res.json("Success");
             } else {
                 res.status(401).json("Incorrect password");
