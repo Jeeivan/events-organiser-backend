@@ -1,12 +1,14 @@
-import { createGroup, displayGroups, joinGroup } from '../../controllers/api/group.js'
+import { createGroup, displayGroups, joinGroup, displayAllGroups } from '../../controllers/api/group.js'
 import express from 'express'
 
 const groupRouter = express.Router()
 
-groupRouter.get('/display', async (req, res) => displayGroups(req,res))
+groupRouter.get('/displayAll', async (req, res) => displayAllGroups(req,res))
+
+groupRouter.get('/display/:email', async (req, res) => displayGroups(req,res))
 
 groupRouter.post('/create', async (req, res) => createGroup(req,res))
 
-groupRouter.post('/join/:userId', async (req, res) => joinGroup(req,res))
+groupRouter.post('/join/:email', async (req, res) => joinGroup(req,res))
 
 export default groupRouter

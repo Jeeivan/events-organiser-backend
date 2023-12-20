@@ -2,7 +2,7 @@ import '../../config/database.js'
 import { Group } from "../../models/group.js";
 import { User } from '../../models/user.js';
 
-export async function displayGroups(req, res) {
+export async function displayAllGroups(req, res) {
     try {
         const groups = await Group.find();
         res.status(200).json(groups);
@@ -11,6 +11,31 @@ export async function displayGroups(req, res) {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+
+export async function displayGroups(req, res) {
+    try {
+        const { email } = req.params;
+
+        // Find the user by email
+        const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // Retrieve the group IDs associated with the user
+      const groupIds = user.groupIds;
+  
+      // Find the groups using the retrieved group IDs
+      const groups = await Group.find({ _id: { $in: groupIds } });
+  
+      res.status(200).json(groups);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
 
 export async function createGroup (req, res) {
     try {
@@ -43,8 +68,15 @@ export async function createGroup (req, res) {
 
 export async function joinGroup(req, res) {
     try {
-        const { userId } = req.params;
+        const { email } = req.params;
         const { groupCode } = req.body;
+
+        // Check if the user exists based on the provided email
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
 
         // Check if the group exists
         const group = await Group.findOne({ code: groupCode });
@@ -53,7 +85,7 @@ export async function joinGroup(req, res) {
         }
 
         // Update the user with the groupId
-        await User.findByIdAndUpdate(userId, {
+        await User.findByIdAndUpdate(user._id, {
             $addToSet: { groupIds: group._id },
         });
 
