@@ -94,3 +94,21 @@ export async function joinGroup(req, res) {
         res.status(500).send(err.message);
     }
 }
+
+export async function displaySingleGroup(req, res) {
+    try {
+        const { groupCode } = req.params;
+
+        const group = await Group.findOne({ code: groupCode })
+        if (!group) {
+            // If no group is found, return a 404 response
+            return res.status(404).json({ message: "Group not found" });
+          }
+      
+          // Return the group in the response
+          res.status(200).json(group);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}

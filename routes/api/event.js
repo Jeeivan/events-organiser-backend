@@ -1,4 +1,4 @@
-import { displayAllEvents, createEvent, displayEventsByCode, displayEventsById } from '../../controllers/api/event.js'
+import { displayAllEvents, createEvent, displayEventsByCode, displayEventsById, deleteEvent } from '../../controllers/api/event.js'
 import express from 'express'
 
 const eventRouter = express.Router()
@@ -10,5 +10,7 @@ eventRouter.get('/display/:groupCode', async (req, res) => displayEventsByCode(r
 eventRouter.get('/display/single/:eventId', async (req, res) => displayEventsById(req,res))
 
 eventRouter.post('/create/:groupId', async (req, res) => createEvent(req,res))
+
+eventRouter.delete('/delete/:id', async (req, res) => deleteEvent(req,res))
 
 export default eventRouter

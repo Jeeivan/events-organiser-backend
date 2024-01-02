@@ -70,3 +70,13 @@ export async function displayEventsById(req, res) {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export async function deleteEvent(req, res) {
+    try {
+        await Event.findByIdAndDelete(req.params.id)
+        res.sendStatus(200)
+    } catch (error) {
+        console.error("Error deleting event:", error)
+        res.sendStatus(400)
+    }
+}
