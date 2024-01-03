@@ -6,8 +6,8 @@ const chatSchema = new mongoose.Schema({
         required: true,
         ref: 'Event'
     },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
+    email: {
+        type: String,
         required: true,
         ref: 'User'
     },

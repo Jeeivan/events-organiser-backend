@@ -16,13 +16,18 @@ export async function displayAllChats (req, res) {
 
 export async function createMessage (req, res) {
     try {
-        const { eventId, userId } = req.params;
+        const { eventId } = req.params;
+        const { email } = req.body
 
-        // Fetch user's name based on user ID
-        const user = await User.findById(userId);
+        // Fetch user's name based on user email
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+          }
 
         const chat = new Chat({
-            userId: userId,
+            email: email,
             userName: user.name,
             eventId: eventId,
             message: req.body.message
@@ -30,6 +35,7 @@ export async function createMessage (req, res) {
         await chat.save()
         res.json(chat)
     } catch (err) {
+        console.error('Error creating message:', err);
         res.status(500).send(err.message)
     }
 }

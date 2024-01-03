@@ -5,6 +5,6 @@ const chatRouter = express.Router()
 
 chatRouter.get('/display/:eventId', async (req, res) => displayAllChats(req,res))
 
-chatRouter.post('/create/:userId/:eventId', async (req, res) => createMessage(req,res))
+chatRouter.post('/create/:eventId', async (req, res) => createMessage(req,res))
 
 export default chatRouter
