@@ -5,6 +5,6 @@ const attendanceRouter = express.Router()
 
 attendanceRouter.get('/display/:eventId', async (req, res) => displayAttendance(req,res))
 
-attendanceRouter.post('/set/:userId/:eventId', async (req, res) => setAttendance(req,res))
+attendanceRouter.post('/set/:eventId', async (req, res) => setAttendance(req,res))
 
 export default attendanceRouter

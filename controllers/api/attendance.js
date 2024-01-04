@@ -1,5 +1,6 @@
 import '../../config/database.js'
 import { Attendance } from '../../models/attendance.js'
+import { User } from '../../models/user.js';
 
 export async function displayAttendance(req, res) {
     try {
@@ -17,10 +18,12 @@ export async function displayAttendance(req, res) {
 
 export async function setAttendance(req, res) {
     try {
-        const { eventId, userId } = req.params;
+        const { eventId } = req.params;
+        const { email } = req.body
 
         // Check if attendance record already exists
-        const existingAttendance = await Attendance.findOne({ userId, eventId });
+        const existingAttendance = await Attendance.findOne({ email, eventId });
+        const user = await User.findOne({ email: email });
 
         if (existingAttendance) {
             // If the record exists, update it
@@ -30,7 +33,8 @@ export async function setAttendance(req, res) {
         } else {
             // If the record doesn't exist, create a new one
             const attendance = new Attendance({
-                userId: userId,
+                email: email,
+                userName: user.name,
                 eventId: eventId,
                 going: req.body.going
             });
