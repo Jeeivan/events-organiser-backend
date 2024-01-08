@@ -92,3 +92,35 @@ export async function displayUsers(req, res) {
     }
 }
 
+export async function leaveGroup(req, res) {
+    const { email, groupId } = req.body;
+  
+    try {
+      // Find the user by ID
+      const user = await User.findOne({ email:email })
+  
+      // If the user doesn't exist, return an error
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Check if the user is a member of the group
+      const isMember = user.groupIds.includes(groupId);
+  
+      // If the user is not a member, return an error
+      if (!isMember) {
+        return res.status(400).json({ message: 'User is not a member of the group' });
+      }
+  
+      // Remove the group ID from the user's groupIds array
+      user.groupIds = user.groupIds.filter((id) => id.toString() !== groupId);
+  
+      // Save the updated user
+      await user.save();
+  
+      return res.status(200).json({ message: 'User successfully left the group' });
+    } catch (error) {
+      console.error('Error leaving group:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  };
