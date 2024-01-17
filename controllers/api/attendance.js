@@ -16,6 +16,20 @@ export async function displayAttendance(req, res) {
     }
 }
 
+export async function displayAttendanceByUser(req, res) {
+    try {
+        const { email } = req.params;
+
+        // Retrieve all attendance records for the specified event
+        const attendance = await Attendance.find({ email });
+
+        res.status(200).json(attendance);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
 export async function setAttendance(req, res) {
     try {
         const { eventId } = req.params;
