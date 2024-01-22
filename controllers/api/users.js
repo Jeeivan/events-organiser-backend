@@ -17,9 +17,19 @@ export async function saveUser(req, res) {
     }
 }
 
+function isValidEmail(email) {
+    const allowedDomains = ['gmail.com', 'outlook.com', 'ymail.com', 'yahoo.com', 'googlemail.com']
+    const [, domain] = email.split('@')
+    return allowedDomains.includes(domain.toLowerCase())
+}
+
 export async function register(req, res) {
     try {
         const {name, email, password} = req.body
+
+        if (!email.includes('@') || !isValidEmail(email)) {
+            return res.status(400).json("Invalid email format or domain")
+        }
 
         const encryptedPassword = await bcrypt.hash(password, 10)
 
